@@ -9,8 +9,12 @@ export type MenuItem = {
   description: string;
   course: string;
   price: number;
-
+  image?: { uri: string } | number; 
 };
+
+
+
+
 
 type MenuContextType = {
   menuItems: MenuItem[];
@@ -28,6 +32,7 @@ const initialMenu: MenuItem[] = [
     description: "Fresh mozzarella, tomatoes, and basil drizzled with balsamic glaze.",
     course: "Starters",
     price: 8.5,
+    image: require("../../assets/images/starters/capre.jpg"),
   },
   {
     id: "2",
@@ -35,6 +40,7 @@ const initialMenu: MenuItem[] = [
     description: "Toasted bread topped with diced tomatoes, garlic, olive oil, and basil.",
     course: "Starters",
     price: 7,
+    image: require("../../assets/images/starters/brush.jpg"),
   },
   {
     id: "3",
@@ -42,6 +48,7 @@ const initialMenu: MenuItem[] = [
     description: "Sautéed prawns in garlic butter sauce served with a lemon wedge.",
     course: "Starters",
     price: 9.5,
+    image: require("../../assets/images/mains/prawns.jpg"),
   },
 
   // 🍝 Mains
@@ -51,6 +58,7 @@ const initialMenu: MenuItem[] = [
     description: "Perfectly grilled salmon with roasted vegetables and lemon butter sauce.",
     course: "Mains",
     price: 18,
+    image: require("../../assets/images/mains/sam.jpg",),
   },
   {
     id: "5",
@@ -58,6 +66,7 @@ const initialMenu: MenuItem[] = [
     description: "Classic layered lasagna with rich meat sauce and creamy béchamel.",
     course: "Mains",
     price: 15.5,
+    image: require("../../assets/images/mains/las.jpg"),
   },
   {
     id: "6",
@@ -65,6 +74,7 @@ const initialMenu: MenuItem[] = [
     description: "Creamy Alfredo sauce tossed with fettuccine and grilled chicken breast.",
     course: "Mains",
     price: 16,
+    image: require("../../assets/images/mains/alfre.jpg"),
   },
 
   // 🍰 Desserts
@@ -74,6 +84,7 @@ const initialMenu: MenuItem[] = [
     description: "Warm chocolate cake with a gooey molten center.",
     course: "Desserts",
     price: 7,
+    image: require("../../assets/images/desserts/lava.jpg"),
   },
   {
     id: "8",
@@ -81,6 +92,7 @@ const initialMenu: MenuItem[] = [
     description: "Classic Italian dessert with espresso-soaked ladyfingers and mascarpone cream.",
     course: "Desserts",
     price: 6.5,
+    image: require("../../assets/images/desserts/tira.jpg"),
   },
   {
     id: "9",
@@ -88,6 +100,7 @@ const initialMenu: MenuItem[] = [
     description: "Creamy baked cheesecake with a buttery biscuit base and berry compote.",
     course: "Desserts",
     price: 6.8,
+    image: require("../../assets/images/desserts/cheese.jpg"),
   },
 
 ];
