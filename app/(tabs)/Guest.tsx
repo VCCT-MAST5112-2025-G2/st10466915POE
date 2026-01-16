@@ -1,31 +1,33 @@
-import React, { useState } from "react";
-import { Button, FlatList, Image, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import MenuCard from "../components/MenuCard";
 import { MenuItem, useMenu } from "../context/MenuContext";
-
-// Memoized card component for each menu item
-const MenuCard = React.memo(({ item }: { item: MenuItem }) => (
-  <View style={styles.card}>
-    {item.image && <Image source={item.image} style={styles.image} resizeMode="cover" />}
-    <Text style={styles.name}>{item.dishName}</Text>
-    <Text>{item.description}</Text>
-    <Text style={styles.price}>${item.price.toFixed(2)}</Text>
-  </View>
-));
 
 export default function GuestScreen() {
   const { menuItems } = useMenu();
-  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<MenuItem["course"] | null>(null);
 
-  const filtered = selectedCourse
-    ? menuItems.filter((i) => i.course === selectedCourse)
+  const filteredMenu = selectedCourse
+    ? menuItems.filter((item) => item.course === selectedCourse)
     : menuItems;
+
+  const renderItem = useCallback(
+    ({ item }: { item: MenuItem }) => <MenuCard item={item} />,
+    []
+  );
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Guest Menu</Text>
 
       <View style={styles.filters}>
-        {["Starters", "Mains", "Desserts"].map((course) => (
+        {(["Starters", "Mains", "Desserts"] as const).map((course) => (
           <Button
             key={course}
             title={course}
@@ -33,15 +35,21 @@ export default function GuestScreen() {
             onPress={() => setSelectedCourse(course)}
           />
         ))}
-        <Button title="All" color="#999" onPress={() => setSelectedCourse(null)} />
+        <Button
+          title="All"
+          color="#999"
+          onPress={() => setSelectedCourse(null)}
+        />
       </View>
 
       <FlatList
-        data={filtered}
+        data={filteredMenu}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <MenuCard item={item} />}
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
+        renderItem={renderItem}
+        initialNumToRender={8}
+        maxToRenderPerBatch={8}
+        windowSize={5}
+        removeClippedSubviews
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -49,29 +57,23 @@ export default function GuestScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFDF7", padding: 16 },
-  title: { fontSize: 20, fontWeight: "bold", color: "#FF6B35", marginBottom: 12 },
-  filters: { flexDirection: "row", justifyContent: "space-around", marginBottom: 10 },
-
-  card: {
-    backgroundColor: "#fff",
-    padding: 12,
-    marginVertical: 8,
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFDF7",
+    padding: 16,
   },
-
-  image: {
-    width: "100%",
-    height: 150,
-    borderRadius: 12,
-    marginBottom: 8,
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#FF6B35",
+    marginBottom: 12,
   },
-
-  name: { fontSize: 16, fontWeight: "bold" },
-  price: { color: "#FF6B35", fontWeight: "600" },
+  filters: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 10,
+  },
 });
+
 
 

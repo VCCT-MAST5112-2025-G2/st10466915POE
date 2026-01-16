@@ -1,20 +1,14 @@
-// MenuContext.tsx
 import React, { createContext, useContext, useState } from "react";
-
-
+import { ImageSourcePropType } from "react-native";
 
 export type MenuItem = {
   id: string;
   dishName: string;
   description: string;
-  course: string;
+  course: "Starters" | "Mains" | "Desserts";
   price: number;
-  image?: { uri: string } | number; 
+  image?: ImageSourcePropType;
 };
-
-
-
-
 
 type MenuContextType = {
   menuItems: MenuItem[];
@@ -25,7 +19,6 @@ type MenuContextType = {
 const MenuContext = createContext<MenuContextType | undefined>(undefined);
 
 const initialMenu: MenuItem[] = [
-  // 🥗 Starters
   {
     id: "1",
     dishName: "Caprese Salad",
@@ -50,15 +43,13 @@ const initialMenu: MenuItem[] = [
     price: 9.5,
     image: require("../../assets/images/mains/prawns.jpg"),
   },
-
-  // 🍝 Mains
   {
     id: "4",
     dishName: "Grilled Salmon",
     description: "Perfectly grilled salmon with roasted vegetables and lemon butter sauce.",
     course: "Mains",
     price: 18,
-    image: require("../../assets/images/mains/sam.jpg",),
+    image: require("../../assets/images/mains/sam.jpg"),
   },
   {
     id: "5",
@@ -76,8 +67,6 @@ const initialMenu: MenuItem[] = [
     price: 16,
     image: require("../../assets/images/mains/alfre.jpg"),
   },
-
-  // 🍰 Desserts
   {
     id: "7",
     dishName: "Chocolate Lava Cake",
@@ -102,15 +91,16 @@ const initialMenu: MenuItem[] = [
     price: 6.8,
     image: require("../../assets/images/desserts/cheese.jpg"),
   },
-
 ];
 
 export const MenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenu);
 
   const addMenuItem = (item: Omit<MenuItem, "id">) => {
-    const newItem: MenuItem = { ...item, id: Date.now().toString() };
-    setMenuItems((prev) => [...prev, newItem]);
+    setMenuItems((prev) => [
+      ...prev,
+      { ...item, id: Date.now().toString() },
+    ]);
   };
 
   const removeMenuItem = (id: string) => {
@@ -126,9 +116,12 @@ export const MenuProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useMenu = () => {
   const context = useContext(MenuContext);
-  if (!context) throw new Error("useMenu must be used within MenuProvider");
+  if (!context) {
+    throw new Error("useMenu must be used within MenuProvider");
+  }
   return context;
 };
+
 
 
 
